@@ -1,0 +1,90 @@
+  <!DOCTYPE html>
+  <html lang="en">
+
+  <head>
+      <meta charset="UTF-8">
+      <meta name="viewport" content="width=device-width, initial-scale=1.0">
+      <title>Clinical Content Summarizer</title>
+
+      <link href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" rel="stylesheet">
+      <style type="text/css">
+      #summaryResult {
+          border: 1px solid #ccc;
+          padding: 10px;
+          display: none;
+      }
+      </style>
+  </head>
+
+  <body>
+      <div class="container mt-4">
+          <h1 class="mb-4">Clinical Content Summarizer</h1>
+          <form id="patientForm">
+              <div class="form-group">
+                  <label for="patientCase">Enter Patient Case:</label>
+                  <textarea class="form-control" id="patientCase" name="patientCase" rows="4" cols="50" required></textarea>
+              </div>
+              <button type="submit" class="btn btn-primary">Submit</button>
+          </form>
+          <div id="summaryResult" class="mt-4"></div>
+      </div>
+
+      <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
+      <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+      <script>
+      document.getElementById('patientForm').addEventListener('submit', function(event) {
+          event.preventDefault();
+          const patientCase = document.getElementById('patientCase').value;
+
+
+          summarizePatientCase(patientCase);
+      });
+
+      async function summarizePatientCase(patientCase) {
+          try {
+              // Make a POST request to the Python API endpoint
+              const response = await fetch('http://127.0.0.1:5000/summarize', {
+                  method: 'POST',
+                  headers: {
+                      'Content-Type': 'application/json'
+                  },
+                  body: JSON.stringify({ patientCase })
+              });
+
+              if (!response.ok) {
+                  throw new Error('An error occurred while summarizing the patient case.');
+              }
+
+              // Parse the JSON response from the server
+              const data = await response.json();
+      
+              console.log(data["summary"])
+              // Display the summarized clinical content
+              const summaryResult = document.getElementById('summaryResult');
+              if (data && typeof data === 'object') {
+                  // Check if data is an object and contains the expected properties
+                  summaryResult.innerHTML = `
+                  <h2>Summarized Clinical Content:</h2>
+                  <p>Name: ${data['summary'].name || 'N/A'}</p>
+                  <p>Age: ${data['summary'].age || 'N/A'}</p>
+                  <p>Gender: ${data['summary'].gender || 'N/A'}</p>
+                  <p>Symptoms: ${Array.isArray(data['summary'].symptoms) ? data['summary'].symptoms.join(', ') : 'N/A'}</p>
+                  <p>Diagnosed Disease: ${data['summary'].diagnosed_disease || 'N/A'}</p>
+              `;
+              } else {
+                  // Handle cases where data is not in the expected format
+                  summaryResult.innerHTML = '<p>Error: Invalid data format</p>';
+              }
+
+              summaryResult.style.display = 'block';
+          } catch (error) {
+              // Handle error
+              const summaryResult = document.getElementById('summaryResult');
+              summaryResult.innerHTML = `<p>${error.message}</p>`;
+              summaryResult.style.display = 'block';
+          }
+      }
+      </script>
+  </body>
+
+  </html>
