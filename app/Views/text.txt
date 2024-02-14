@@ -1,0 +1,6 @@
+1.  write a java program that will return first half of the string if the length of the string is even otherwise it should return null
+2.  Given two string s1 and s2 return a new string of the form short+long+short,with shorter string on the outside and long string on the inside 
+    for example if the input is hi and hello then the output will be hihellohi 
+3.  Write a aprogram that will concatenate two string and return the string in lowercase
+NOTE-IF THE CONCATENATION CREATE A DOUBLE CHAR,THEN ONE OF THE CHARACTER NEEDS TO BE OMITTTED
+FOR EX-if s1 string is mark and second string is kate then output should be in smallcase markate
