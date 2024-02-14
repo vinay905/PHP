@@ -1,0 +1,63 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>MailForm</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/css/bootstrap.min.css" rel="stylesheet">
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/js/bootstrap.bundle.min.js"></script>
+</head>
+<style>
+    
+</style>
+<body>
+    <div class="container">
+        <div class="col-sm-12 text-center">
+            <span id="alerttxt1">
+                <?=session()->get("success");?>    
+            </span>
+        </div>
+        <center>
+            <?=session()->getFlashdata('failure') ?>
+        </center>
+        <div class="row">
+            <div class="col-md-6 offset-md-3 mt-3">
+                <h3>Contact</h3>
+                <form method="post" action="<?=base_url('sentmail')?>">
+                    <div class="form-group my-2">
+                        <label for="">Name:</label>
+                        <input type="text" class="form-control" placeholder="Enter name" name="name" value="<?= set_value('name')?>">
+                        <span class="text-danger">
+                            <?=(isset($validates) && $validates->hasError('name')) ? $validates->getError('name'):''?>
+                        </span>
+                    </div>
+                    <div class="form-group my-2">
+                        <label for="">Email:</label>
+                        <input type="text" class="form-control" placeholder="Enter your mail address" name="email" value="<?= set_value('mail')?>">
+                        <span class="text-danger">
+                            <?=(isset($validates) && $validates->hasError('email')) ? $validates->getError('email'):''?>
+                        </span>
+                    </div>
+                    <div class="form-group my-2">
+                        <label for="">Subject:</label>
+                        <input type="text" class="form-control" placeholder="Enter Subject " name="subject" value="<?= set_value('subject')?>">
+                        <span class="text-danger">
+                            <?=(isset($validates) && $validates->hasError('subject')) ? $validates->getError('subject'):''?>
+                        </span>
+                    </div>
+                    <div class="form-group my-2">
+                        <label for="">Message:</label>
+                        <textarea class="form-control" cols="3" rows="3" name="message" placeholder="Enter Message" value="<?= set_value('message')?>"></textarea>
+                        <span class="text-danger">
+                            <?=(isset($validates) && $validates->hasError('message')) ? $validates->getError('message'):''?>
+                        </span>
+                    </div>
+                    <button class="btn btn-primary my-2">Send</button>
+                </form>
+            </div>
+        </div>
+    </div>
+</body>
+
+</html>
